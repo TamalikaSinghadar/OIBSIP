@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Login Authentication</title>
+    <style>
+        body{
+            background-color: rgb(129, 230, 129);
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <h1>LOGIN AUTHENTICATION</h1>
+    <div id="loginForm">
+        <h2>Login</h2>
+        <form id="login">
+            <input type="text" id="loginUsername" placeholder="Username" required><br>
+            <input type="password" id="loginPassword" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div id="registrationForm">
+        <h2>Register</h2>
+        <form id="register">
+            <input type="text" id="registerUsername" placeholder="Username" required><br>
+            <input type="password" id="registerPassword" placeholder="Password" required><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    <div id="securedPage" style="display:none">
+        <h2>Secured Page</h2>
+        <p>Congratulations! You have successfully logged in.</p>
+        <button id="logout">Logout</button>
+    </div></center>
+    <script>
+        // Simulated database of registered users
+const users = [];
+
+// Check if a user is logged in
+let loggedInUser = null;
+
+// Function to show/hide elements based on login status
+function toggleElements() {
+    if (loggedInUser) {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('securedPage').style.display = 'block';
+    } else {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registrationForm').style.display = 'block';
+        document.getElementById('securedPage').style.display = 'none';
+    }
+}
+
+// Function to handle user registration
+document.getElementById('register').addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('registerUsername').value;
+    const password = document.getElementById('registerPassword').value;
+
+    // Check if the username is already registered
+    if (users.find(user => user.username === username)) {
+        alert('Username already exists. Please choose a different one.');
+        return;
+    }
+
+    // Register the user
+    users.push({ username, password });
+    alert('Registration successful. You can now log in.');
+    document.getElementById('registerUsername').value = '';
+    document.getElementById('registerPassword').value = '';
+});
+
+// Function to handle user login
+document.getElementById('login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+
+    // Check if the provided credentials match any registered user
+    const user = users.find(user => user.username === username && user.password === password);
+    
+    if (user) {
+        loggedInUser = user;
+        toggleElements();
+    } else {
+        alert('Invalid username or password. Please try again.');
+    }
+
+    // Clear the login form
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+});
+
+// Function to handle user logout
+document.getElementById('logout').addEventListener('click', function () {
+    loggedInUser = null;
+    toggleElements();
+});
+
+// Initial state
+toggleElements();
+
+    </script>
+</body>
+</html>
